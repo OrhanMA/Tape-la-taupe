@@ -1,0 +1,84 @@
+*,
+:after,
+:before,
+:root,
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 16px;
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.hill {
+  background: url("../assets/mole-hill.png");
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: bottom;
+  /* background-color: aqua; */
+  display: flex;
+  justify-content: center;
+  /* position: absolute; */
+  width: 15rem;
+  margin-bottom: 3rem;
+}
+
+.mole {
+  width: 5rem;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.app {
+  padding: 2rem;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(72, 41, 19);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  & h1 {
+    font-size: 5rem;
+  }
+  > .score-container {
+    & h2 {
+      font-size: 3rem;
+    }
+    & p {
+      font-size: 3rem;
+      color: yellow;
+    }
+  }
+}
+
+.up {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  border-radius: 1rem;
+  border: none;
+}
+
+.score-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}

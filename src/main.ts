@@ -23,6 +23,12 @@ startButton?.addEventListener("click", () => {
   setTimeout(startGame, 2000);
 });
 
+moles.forEach((mole) => {
+  mole.addEventListener("click", (e: MouseEvent) => {
+    hitMole(e, mole);
+  });
+});
+
 function startGame(): void {
   score = 0;
   timeUp = false;
@@ -58,11 +64,6 @@ function hitMole(e: MouseEvent, mole: HTMLImageElement): void {
   }
   mole.classList.remove("up");
 }
-moles.forEach((mole) => {
-  mole.addEventListener("click", (e: MouseEvent) => {
-    hitMole(e, mole);
-  });
-});
 
 function getRandomHill(): HTMLDivElement {
   const index: number = Math.floor(Math.random() * hills.length);

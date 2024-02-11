@@ -19,3 +19,4 @@ Pour ce mini projet j'ai utilisé:
 
 - [Typescript](https://www.typescriptlang.org/)
 - [Vite](https://vitejs.dev/)
+- [Coolors](https://coolors.co/)

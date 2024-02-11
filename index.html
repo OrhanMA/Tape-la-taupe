@@ -8,59 +8,113 @@
       content="A Whack-a-mole game game using vanilla Typescript"
     />
     <link rel="stylesheet" href="./src/style.css" />
-    <title>Whack-a-mole Game</title>
+    <title>Tape la taupe</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <script src="./src/main.ts" defer></script>
   </head>
   <body>
-    <div class="app">
-      <h1>Tape la taupe!</h1>
+    <div class="welcome">
+      <div class="welcome-infos">
+        <h2>Bonjour! Bienvenue dans Tape la taupe!</h2>
+        <p>
+          Voici le but du jeu: taper les taupes le plus rapidement possible dans
+          le temps imparti. <br />
+          il y a plusieurs types de taupes, chacune donnant des points
+          différents. Attention aux surprises... 😈
+        </p>
+        <p>
+          Avant de commencer, veuillez sélectionner vos options pour la partie:
+        </p>
+        <div class="game-options">
+          <div>
+            <label for="duration">Durée de la partie</label>
+            <select name="duration" id="duration">
+              <option value="10">10s 🐌</option>
+              <option value="20">20s 🏃</option>
+              <option value="30">30s 🏎️</option>
+            </select>
+          </div>
+          <div>
+            <label for="difficulty">Difficulté</label>
+            <select name="difficulty" id="difficulty">
+              <option value="facile">facile 😌</option>
+              <option value="normal">normal 😀</option>
+              <option value="difficile">difficile 😡</option>
+              <option value="impossible">impossible 💀</option>
+            </select>
+          </div>
+          <div>
+            <label for="name">Votre nom</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="super taupe"
+            />
+          </div>
+        </div>
+        <button id="startButton">Commencer</button>
+      </div>
+    </div>
+    <div class="game-container">
       <div class="score-container">
         <h2>Score:</h2>
         <p class="score">0</p>
       </div>
-      <button type="button" class="startButton">Commencer</button>
       <div class="game">
         <div class="hill">
-          <img
-            class="mole mole-1"
-            src="./assets/mole-head.png"
-            alt="mole head"
-          />
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
         </div>
         <div class="hill">
-          <img
-            class="mole mole-2"
-            src="./assets/mole-head.png"
-            alt="mole head"
-          />
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
         </div>
         <div class="hill">
-          <img
-            class="mole mole-3"
-            src="./assets/mole-head.png"
-            alt="mole head"
-          />
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
         </div>
         <div class="hill">
-          <img
-            class="mole mole-4"
-            src="./assets/mole-head.png"
-            alt="mole head"
-          />
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
         </div>
         <div class="hill">
-          <img
-            class="mole mole-5"
-            src="./assets/mole-head.png"
-            alt="mole head"
-          />
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
         </div>
         <div class="hill">
-          <img
-            class="mole mole-6"
-            src="./assets/mole-head.png"
-            alt="mole head"
-          />
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
+        </div>
+        <div class="hill">
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
+        </div>
+        <div class="hill">
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
+        </div>
+        <div class="hill">
+          <img class="mole" src="./assets/mole-head.png" alt="mole head" />
+        </div>
+      </div>
+    </div>
+    <div class="endgame">
+      <div class="endgame-infos">
+        <h2>Voici votre score final:</h2>
+        <div class="score-container">
+          <p>Vous avez obtenu</p>
+          <p class="score-display"></p>
+          points
+        </div>
+        <button id="reloadButton">Rejouer</button>
+      </div>
+      <div class="leaderboard-container">
+        <p>
+          Voici le leaderboard actuel pour votre mode de jeu. Essayez de devenir
+          1er!
+        </p>
+        <div class="endgame-leaderboard">
+          <ul>
+            <li>
+              <p>player ame</p>
+              <p>score</p>
+              <p>difficulty</p>
+              <p>duration</p>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

@@ -11,27 +11,70 @@ body {
 
 :root {
   font-size: 16px;
+  --white-powder: #fdfffc;
+  --rust: #af4319;
+  --falu-red: #772014;
+  --bistre: #3f220f;
+  --smoky-black: #19180a;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.game-container {
+  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+  background: url(/assets/prairie.jpeg);
+  /* background-color: var(--bistre); */
+  /* color: white; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  & h1 {
+    font-size: 5rem;
+  }
+  > .score-container {
+    margin-top: 3rem;
+    justify-content: center;
+    & h2 {
+      font-size: 3rem;
+      color: var(--bistre);
+    }
+    & p {
+      font-size: 3rem;
+      color: var(--white-powder);
+    }
+  }
 }
 
 .game {
-  display: flex;
+  margin-top: 5rem;
+  height: 60dvh;
+  display: grid;
+  grid-template:
+    "a a a"
+    "a a a"
+    "a a a";
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  @media screen and (min-width: 768px) {
+    gap: 4rem;
+    width: 66%;
+  }
 }
 
 .hill {
   background: url("../assets/mole-hill.png");
   background-repeat: no-repeat;
-  background-size: 50%;
+  background-size: 100%;
   background-position: bottom;
-  /* background-color: aqua; */
   display: flex;
   justify-content: center;
-  /* position: absolute; */
-  width: 15rem;
-  margin-bottom: 3rem;
 }
 
 .mole {
@@ -39,30 +82,7 @@ body {
   transform: translateY(100%);
   opacity: 0;
   transition: all 0.3s ease;
-}
-
-.app {
-  padding: 2rem;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgb(72, 41, 19);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3rem;
-  & h1 {
-    font-size: 5rem;
-  }
-  > .score-container {
-    & h2 {
-      font-size: 3rem;
-    }
-    & p {
-      font-size: 3rem;
-      color: yellow;
-    }
-  }
+  border-radius: 50%;
 }
 
 .up {
@@ -81,4 +101,201 @@ button {
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+.welcome {
+  position: absolute;
+  background-color: var(--white-powder);
+  color: black;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  z-index: 100;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    padding: 3rem;
+  }
+
+  .welcome-infos,
+  .welcome-leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .welcome-infos {
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+
+    @media screen and (min-width: 640px) {
+      font-size: 1.2rem;
+    }
+    @media screen and (min-width: 768px) {
+      font-size: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      color: var(--rust);
+    }
+    .game-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1rem 0rem;
+      @media screen and (min-width: 768px) {
+        margin: 3rem 0rem;
+      }
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        align-self: center;
+        width: 100%;
+        gap: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: solid 2px var(--bistre);
+
+        @media screen and (min-width: 640px) {
+          width: 70%;
+          padding-bottom: 1rem;
+        }
+        @media screen and (min-width: 768px) {
+          width: 60%;
+          padding-bottom: 1rem;
+        }
+
+        label {
+          color: var(--falu-red);
+        }
+
+        select,
+        input {
+          padding: 0.3rem;
+          border-radius: 5px;
+          font-size: 1rem;
+          width: 150px;
+          border: solid 2px var(--bistre);
+          color: var(--rust);
+
+          @media screen and (min-width: 768px) {
+            padding: 0.8rem;
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+    #startButton {
+      background-color: var(--smoky-black);
+      color: var(--white-powder);
+      width: 200px;
+      align-self: center;
+      border-radius: 5px;
+      font-size: 1rem;
+
+      @media screen and (min-width: 768px) {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .welcome-leaderboard {
+    font-size: 1.2rem;
+
+    @media screen and (min-width: 768px) {
+      width: 40%;
+      padding-left: 2rem;
+    }
+  }
+}
+
+.endgame {
+  position: absolute;
+  width: 100vw;
+  min-height: 100vh;
+  display: none;
+  padding: 2rem;
+
+  .endgame-infos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .score-container {
+    color: var(--rust);
+    font-size: 1.2rem;
+
+    .score-display {
+      color: var(--falu-red);
+    }
+  }
+  .leaderboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .leaderboard-container > p {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+  .endgame-leaderboard {
+    background-color: var(--falu-red);
+    width: 100%;
+    @media screen and (min-width: 768px) {
+      width: 60%;
+    }
+    min-height: 300px;
+    max-height: 600px;
+    overflow-y: scroll;
+    margin-top: 2rem;
+    padding: 2rem;
+    color: var(--white-powder);
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    ul li {
+      width: 100%;
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      border-bottom: solid 2px var(--rust);
+      padding: 2rem;
+      p {
+        width: 20%;
+      }
+      :nth-child(2) {
+        overflow: hidden;
+      }
+    }
+  }
+
+  #reloadButton {
+    background-color: var(--smoky-black);
+    color: var(--white-powder);
+    font-size: 1rem;
+    margin: 2rem 0.5rem;
+  }
+}
+
+.points-1 {
+  background-color: var(--white-powder);
+}
+
+.points-2 {
+  background-color: var(--falu-red);
+}
+
+.points-3 {
+  background-color: yellow;
 }

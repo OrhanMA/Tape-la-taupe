@@ -34,36 +34,47 @@ let playerName: string;
 let difficulty: string;
 let lastMolePoints: number = 0;
 
-startButton?.addEventListener("click", () => {
-  if (durationSelect?.value && difficultySelect?.value) {
-    difficulty = difficultySelect.value;
-    setGameDifficulty(difficultySelect.value);
-    setGameDuration(durationSelect.value);
+document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlPlayerName = urlParams.get("player");
+  if (urlPlayerName !== null && nameInput) {
+    nameInput.value = urlPlayerName;
   }
-  if (endgameContainer) {
-    endgameContainer.style.display = "none";
-  }
-  if (welcome) {
-    welcome.style.display = "none";
-  }
-  if (nameInput?.value) {
-    playerName = nameInput.value;
-    gameContainer.style.display = "block";
-    startGame();
-  } else {
-    alert("Veuillez entrer un nom de joueur");
-    window.location.reload();
-  }
-});
-
-moles.forEach((mole) => {
-  mole.addEventListener("click", (e: MouseEvent) => {
-    hitMole(e, mole);
+  startButton?.addEventListener("click", () => {
+    if (durationSelect?.value && difficultySelect?.value) {
+      difficulty = difficultySelect.value;
+      setGameDifficulty(difficultySelect.value);
+      setGameDuration(durationSelect.value);
+    }
+    if (nameInput?.value) {
+      playerName = nameInput.value;
+      if (endgameContainer) {
+        endgameContainer.style.display = "none";
+      }
+      if (welcome) {
+        welcome.style.display = "none";
+      }
+      gameContainer.style.display = "block";
+      startGame();
+    } else {
+      alert("Veuillez entrer un nom de joueur");
+      window.location.reload();
+    }
   });
-});
 
-reloadButton?.addEventListener("click", () => {
-  window.location.reload();
+  reloadButton?.addEventListener("click", () => {
+    if (playerName) {
+      window.location.href = `/?player=${playerName}`;
+    } else {
+      window.location.reload();
+    }
+  });
+
+  moles.forEach((mole) => {
+    mole.addEventListener("click", (e: MouseEvent) => {
+      hitMole(e, mole);
+    });
+  });
 });
 
 function checkWinnablePoints(mole: HTMLImageElement) {
@@ -116,13 +127,16 @@ function moleUp(): void {
   const mole: HTMLImageElement | null = hill.querySelector(".mole");
 
   let moleClass: string;
-  const randomNumber = Math.random();
+
+  const range = maxTime - minTime;
+  const rangeFor3Points = range * 0.2 + minTime;
+  const rangeFor2Points = range * 0.5 + minTime;
 
   if (mole) {
-    if (randomNumber < 0.2) {
+    if (time <= rangeFor3Points) {
       moleClass = "points-3";
       mole.style.filter = "brightness(1.2)";
-    } else if (randomNumber >= 0.2 && randomNumber < 0.5) {
+    } else if (time > rangeFor3Points && time <= rangeFor2Points) {
       moleClass = "points-2";
       mole.style.filter = "brightness(1.5)";
     } else {
@@ -198,19 +212,24 @@ function saveGameData(): void {
     difficulty &&
     (gameDuration === 10000 || gameDuration === 20000 || gameDuration === 30000)
   ) {
+    // objet avec les données de la partie jouée
     const gameData = {
       playerName,
       score,
       gameDuration: durationSelect?.value,
       difficulty,
     };
+    // vérifie si il y a des parties enregistrées dans le localstorage sinon crée un objet vide
     const savedGames = JSON.parse(localStorage.getItem("savedGames") || "{}");
+    // crée une clé correspondant à la catégorie de la partie jouée par exemple 10000-facile
     const key = `${gameData.gameDuration}-${gameData.difficulty}`;
 
+    // si il n'y a pas des parties sauvegardées pour ce type de parties, crée un tableau vide avec la clé
     if (!savedGames[key]) {
       savedGames[key] = [];
     }
 
+    // ajoute la partie dans le tableau correspondant et save dans le localstorage
     savedGames[key].push(gameData);
     localStorage.setItem("savedGames", JSON.stringify(savedGames));
   }
@@ -219,7 +238,7 @@ function saveGameData(): void {
 function displayLeaderboardData(): void {
   const difficultyDisplay =
     difficulty?.charAt(0).toUpperCase() + difficulty?.slice(1);
-
+  // met le mode de jeu avec la première lettre en majuscule
   const leaderboardContainer = document.querySelector(
     ".endgame-leaderboard ul"
   );
@@ -227,10 +246,12 @@ function displayLeaderboardData(): void {
     leaderboardContainer.innerHTML = "";
   }
 
+  // récupère les parties enregistrées avec la durée et difficulté correspondante
   const savedGames = JSON.parse(localStorage.getItem("savedGames") || "{}");
   const key = `${durationSelect?.value}-${difficultySelect?.value}`;
 
   if (savedGames[key]) {
+    // tri des parties par nombre de points
     savedGames[key].sort((a: any, b: any) => b.score - a.score);
     savedGames[key].forEach(
       (
@@ -243,6 +264,7 @@ function displayLeaderboardData(): void {
         index: number
       ) => {
         const listItem = document.createElement("li");
+        // la durée est en string puisque c'était dans le localstorage, parseInt transforme la string en integer
         const gameDurationSeconds = parseInt(game.gameDuration);
         listItem.innerHTML = `
         <p>${index + 1 + "."}</p>

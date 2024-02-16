@@ -235,6 +235,14 @@ export function displayLeaderboardData(difficulty: string): void {
   // récupère les parties enregistrées avec la durée et difficulté correspondante
   const savedGames = JSON.parse(localStorage.getItem("savedGames") || "{}");
   const key = `${elements.durationSelect?.value}-${elements.difficultySelect?.value}`;
+  // la durée est en string puisque c'était dans le localstorage, parseInt transforme la string en integer
+
+  const gameDurationSeconds = parseInt(savedGames[key][0].gameDuration);
+  const modeDisplay = document.querySelector(
+    ".end-game-difficulty"
+  ) as HTMLSpanElement;
+
+  modeDisplay.innerHTML = difficultyDisplay + " - " + gameDurationSeconds;
 
   if (savedGames[key]) {
     // tri des parties par nombre de points
@@ -250,14 +258,10 @@ export function displayLeaderboardData(difficulty: string): void {
         index: number
       ) => {
         const listItem = document.createElement("li");
-        // la durée est en string puisque c'était dans le localstorage, parseInt transforme la string en integer
-        const gameDurationSeconds = parseInt(game.gameDuration);
         listItem.innerHTML = `
         <p>${index + 1 + "."}</p>
         <p>${game.playerName}</p>
         <p>${game.score} points </p>
-        <p>${difficultyDisplay}</p>
-        <p>${gameDurationSeconds} s</p>
       `;
         leaderboardContainer?.appendChild(listItem);
       }

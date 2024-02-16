@@ -32,6 +32,7 @@
     <audio class="intro-sound" src="./assets/audio/welcome-weasel.mp3"></audio>
     <audio class="game-sound" src="./assets/audio/game-monkeys.mp3"></audio>
     <audio class="end-sound" src="./assets/audio/end-duck.mp3"></audio>
+
     <div class="welcome">
       <div class="welcome-infos">
         <h2>Bonjour! Bienvenue dans Tape la taupe!</h2>
@@ -75,15 +76,16 @@
         <button id="startButton">Commencer</button>
       </div>
     </div>
+
     <div class="game-container">
       <div class="game-infos">
         <div class="game-score-container">
           <p>Score:</p>
-          <p class="game-score"></p>
+          <p class="game-score">0</p>
         </div>
         <div class="game-time-container">
-          <p>Temps restant:</p>
-          <p class="game-time"></p>
+          <p>Temps:</p>
+          <p class="game-time">0</p>
         </div>
       </div>
       <div class="game">
@@ -173,7 +175,8 @@
       </div>
       <div class="leaderboard-container">
         <p>
-          Voici le leaderboard actuel pour votre mode de jeu. Essayez de devenir
+          Voici le leaderboard actuel pour votre mode de jeu
+          <span class="end-game-difficulty">0</span>. <br />Essayez de devenir
           1er!
         </p>
         <div class="endgame-leaderboard">

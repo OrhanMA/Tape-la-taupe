@@ -30,10 +30,18 @@ body {
   /* box-shadow: -3px 3px 0px 0px rgba(0, 0, 0, 0.6); */
   transition: all ease-in 200ms;
   svg {
-    width: 30px;
+    width: 20px;
   }
 }
 
+@media screen and(min-width:640px) {
+  .allow-sound-button,
+  .block-sound-button {
+    svg {
+      width: 30px;
+    }
+  }
+}
 .allow-sound-button:hover,
 .block-sound-button:hover {
   /* box-shadow: -5px 5px 0px 0px rgba(0, 0, 0, 0.8); */
@@ -175,7 +183,7 @@ button {
   background-color: var(--white-powder);
   color: black;
   width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

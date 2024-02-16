@@ -23,7 +23,7 @@ let difficulty: string;
 
 // Les navigateurs bloquent par défaut l'audio et il faut donc donner aux utilisateurs un bouton pour autoriser/bloquer l'audio.
 // Cette variable va garder état de l'audio dans l'app
-let audioPaused = true;
+let audioPaused: boolean = true;
 
 // Garde l'état de la partie (début, partie en cours, fin de partie)
 let gameStage: 1 | 2 | 3 = 1;
@@ -37,17 +37,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Les deux boutons pour autoriser/bloquer l'audio
   elements.allowSoundButton.addEventListener("click", () => {
-    controlSound(checkGameStageAudio(gameStage));
-    audioPaused = false;
+    if (audioPaused === true) {
+      controlSound(checkGameStageAudio(gameStage));
+      audioPaused = false;
+    }
   });
 
   elements.blockSoundButton.addEventListener("click", () => {
-    elements.introSound.pause();
-    elements.gameSound.pause();
-    elements.endSound.pause();
-    elements.allowSoundButton.style.display = "block";
-    elements.blockSoundButton.style.display = "none";
-    audioPaused = true;
+    if (audioPaused === false) {
+      elements.introSound.pause();
+      elements.gameSound.pause();
+      elements.endSound.pause();
+      elements.allowSoundButton.style.display = "block";
+      elements.blockSoundButton.style.display = "none";
+      audioPaused = true;
+    }
   });
 
   // Bouton pour rejouer

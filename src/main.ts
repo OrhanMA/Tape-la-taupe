@@ -171,16 +171,16 @@ function setGameDifficulty(difficulty: string) {
       maxTime = 2000;
       break;
     case "normal":
-      minTime = 500;
+      minTime = 750;
       maxTime = 1500;
       break;
     case "difficile":
-      minTime = 200;
-      maxTime = 1000;
+      minTime = 500;
+      maxTime = 1250;
       break;
     case "impossible":
-      minTime = 150;
-      maxTime = 500;
+      minTime = 250;
+      maxTime = 1000;
       break;
     default:
       minTime = 1000;

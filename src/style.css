@@ -19,6 +19,36 @@ body {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
+.allow-sound-button,
+.block-sound-button {
+  color: white;
+  border-radius: 5px;
+  margin: 1rem;
+  position: absolute;
+  z-index: 200;
+  font-size: 1rem;
+  /* box-shadow: -3px 3px 0px 0px rgba(0, 0, 0, 0.6); */
+  transition: all ease-in 200ms;
+  svg {
+    width: 30px;
+  }
+}
+
+.allow-sound-button:hover,
+.block-sound-button:hover {
+  /* box-shadow: -5px 5px 0px 0px rgba(0, 0, 0, 0.8); */
+  /* transform: translate(5px, -5px); */
+  transform: scale(1.1);
+}
+
+.allow-sound-button {
+  background-color: green;
+}
+.block-sound-button {
+  display: none;
+  background-color: red;
+}
+
 .game-container {
   padding: 2rem;
   width: 100%;
@@ -34,16 +64,39 @@ body {
   & h1 {
     font-size: 5rem;
   }
-  > .score-container {
-    margin-top: 3rem;
+
+  .game-infos {
+    display: flex;
     justify-content: center;
-    & h2 {
-      font-size: 3rem;
-      color: var(--bistre);
+    flex-direction: row;
+    gap: 3rem;
+    align-items: center;
+    > .game-score-container,
+    .game-time-container {
+      display: flex;
+      gap: 1rem;
+      margin-top: 3rem;
+      justify-content: center;
+
+      & p {
+        font-size: 3rem;
+      }
+      & :nth-child(2) {
+        color: var(--white-powder);
+      }
     }
-    & p {
-      font-size: 3rem;
-      color: var(--white-powder);
+
+    .game-score-container {
+      & :first-child {
+        font-size: 3rem;
+        color: var(--falu-red);
+      }
+    }
+    .game-time-container {
+      & :first-child {
+        font-size: 3rem;
+        color: var(--rust);
+      }
     }
   }
 }

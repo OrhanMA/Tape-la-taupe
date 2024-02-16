@@ -5,7 +5,7 @@ const moles = document.querySelectorAll(
 ) as NodeListOf<HTMLImageElement>;
 const hills = document.querySelectorAll(".hill") as NodeListOf<HTMLDivElement>;
 const scoreDisplay: HTMLParagraphElement | null =
-  document.querySelector(".score");
+  document.querySelector(".game-score");
 const scoreEndGame = document.querySelector(
   ".score-display"
 ) as HTMLParagraphElement;
@@ -33,8 +33,46 @@ let gameDuration: number = 10000;
 let playerName: string;
 let difficulty: string;
 let lastMolePoints: number = 0;
+const timeDisplay = document.querySelector(
+  ".game-time"
+) as HTMLParagraphElement;
+const introSound = document.querySelector(".intro-sound") as HTMLAudioElement;
+const gameSound = document.querySelector(".game-sound") as HTMLAudioElement;
+const endSound = document.querySelector(".end-sound") as HTMLAudioElement;
+const allowSoundButton = document.querySelector(
+  ".allow-sound-button"
+) as HTMLButtonElement;
+const blockSoundButton = document.querySelector(
+  ".block-sound-button"
+) as HTMLButtonElement;
+
+enum SoundType {
+  Intro,
+  Game,
+  End,
+}
+
+// Les navigateurs bloquent par défaut l'audio et il faut donc donner aux utilisateurs un bouton pour autoriser/bloquer l'audio.
+// Cette variable va garder état de l'audio dans l'app
+let audioPaused = true;
+
+// Garde l'état de la partie (début, partie en cours, fin de partie)
+let gameStage: 1 | 2 | 3 = 1;
+
+// Dirige vers le bon audio selon l'état de la partie
+function checkGameStageAudio(stage: number) {
+  switch (stage) {
+    case 1:
+      return SoundType.Intro;
+    case 2:
+      return SoundType.Game;
+    case 3:
+      return SoundType.End;
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
+  // récupère le nom du joueur dans les paramètre d'url si il y en a un pour pré-remplir le champ automatiquement
   const urlParams = new URLSearchParams(window.location.search);
   const urlPlayerName = urlParams.get("player");
   if (urlPlayerName !== null && nameInput) {
@@ -62,6 +100,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Les deux boutons pour autoriser/bloquer l'audio
+  allowSoundButton.addEventListener("click", () => {
+    controlSound(checkGameStageAudio(gameStage));
+  });
+
+  blockSoundButton.addEventListener("click", () => {
+    introSound.pause();
+    gameSound.pause();
+    endSound.pause();
+    allowSoundButton.style.display = "block";
+    blockSoundButton.style.display = "none";
+    audioPaused = true;
+  });
+
+  // Bouton pour rejouer
+  // Envoi en paramètre d'url le nom du joueur pour un pré-remplissage du champ
   reloadButton?.addEventListener("click", () => {
     if (playerName) {
       window.location.href = `/?player=${playerName}`;
@@ -76,6 +130,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// Gère l'état de l'audio joué et change l'affichage des boutons de contrôle du son
+function controlSound(soundType: SoundType | undefined): void {
+  introSound.pause();
+  gameSound.pause();
+  endSound.pause();
+
+  allowSoundButton.style.display = "none";
+  blockSoundButton.style.display = "block";
+
+  switch (soundType) {
+    case SoundType.Intro:
+      introSound.play();
+      allowSoundButton.style.display = "none";
+      blockSoundButton.style.display = "block";
+      break;
+    case SoundType.Game:
+      gameSound.play();
+      allowSoundButton.style.display = "block";
+      break;
+    case SoundType.End:
+      endSound.play();
+      allowSoundButton.style.display = "block";
+      break;
+  }
+
+  audioPaused = false;
+}
 
 function checkWinnablePoints(mole: HTMLImageElement) {
   if (mole.classList.contains("points-1")) return 1;
@@ -105,20 +187,56 @@ function getRandomHill(): HTMLDivElement {
 }
 
 function startGame(): void {
+  gameStage = 2;
+  controlSound(checkGameStageAudio(gameStage));
   score = 0;
   timeUp = false;
   if (scoreDisplay) {
     scoreDisplay.textContent = "0";
   }
   moleUp();
-  setTimeout(() => {
-    timeUp = true;
-    gameContainer.style.display = "none";
-    endgameContainer.style.display = "block";
-    scoreEndGame.textContent = score.toString();
-    saveGameData();
-    displayLeaderboardData();
-  }, gameDuration);
+  let startTime = Date.now();
+  // interval qui compare la date de début de partie avec la date actuelle pour stopper la partie quand il le faut
+  const chrono = setInterval(() => {
+    let elapsedTime = Date.now() - startTime;
+    let timeLeft = gameDuration - elapsedTime;
+
+    if (timeLeft < 0) {
+      clearInterval(chrono);
+      endGame();
+    } else {
+      updateTimeDisplay(Math.round(timeLeft / 1000));
+    }
+  }, 1000);
+}
+
+function endGame(): void {
+  timeUp = true;
+  gameContainer.style.display = "none";
+  endgameContainer.style.display = "block";
+  scoreEndGame.textContent = score.toString();
+  saveGameData();
+  displayLeaderboardData();
+  gameStage = 3;
+  controlSound(checkGameStageAudio(gameStage));
+}
+
+function updateTimeDisplay(secondesRestantes: number) {
+  timeDisplay.textContent = secondesRestantes.toString();
+  if (secondesRestantes >= 1) {
+    secondesRestantes -= 1;
+  }
+  if (secondesRestantes <= gameDuration / 3000) {
+    timeDisplay.style.color = "red";
+  } else if (
+    secondesRestantes >= gameDuration / 3000 &&
+    secondesRestantes <= (gameDuration / 1000) * 0.67
+  ) {
+    timeDisplay.style.color = "orange";
+  } else {
+    timeDisplay.style.color = "lightgreen";
+  }
+  return secondesRestantes;
 }
 
 function moleUp(): void {
